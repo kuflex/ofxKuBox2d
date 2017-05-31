@@ -71,6 +71,12 @@ struct ofxKuBox2dWorldParams {
 	float timeStep() { return (fps>0)?(1.0/fps):(1.0/60.0); }
 
 
+	//Applying mask to world
+	int velocity_iterations;	//Number of iterations for compute physics			
+	int position_iterations;			
+	int rolling_iterations;		//Iterations in rolling ball method for searching free space in mask
+	float force_boost;	//Amplifying force from mask
+
 	//Constructor
 	ofxKuBox2dWorldParams() {
 		scr_w = 1024;
@@ -80,6 +86,11 @@ struct ofxKuBox2dWorldParams {
 		gravity = -5.0;
 
 		fps = 60.0;
+
+		velocity_iterations = 10;				
+		position_iterations = 10;	
+		rolling_iterations = 3;
+		force_boost = 20.0;
 
 	}
 };

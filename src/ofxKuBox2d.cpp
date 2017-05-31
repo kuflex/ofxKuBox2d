@@ -74,8 +74,8 @@ void ofxKuBox2dWorld::update( bool physics )
 		// second (60Hz) and 10 iterations. This provides a high quality simulation
 		// in most game scenarios.
 		float32 timeStep = prm.timeStep();
-		int32 velocityIterations = 10;				//ПАРАМЕТР
-		int32 positionIterations = 10;				//ПАРАМЕТР  
+		int32 velocityIterations = prm.velocity_iterations;			
+		int32 positionIterations = prm.position_iterations;				 
 
 		// Instruct the world to perform a single step of simulation.
 		// It is generally best to keep the time step and iterations fixed.
@@ -279,8 +279,6 @@ void ofxKuBox2dWorld::findMoveFromMask(vector<unsigned char> &mask, int w, int h
 {
 	const float scaleX = 1.0 * w / prm.scr_w;
 	const float scaleY = 1.0 * h / prm.scr_h;
-
-	const float RAD_BOOST = 1.0; //ПАРАМЕТР поиска свободного места
 	
 	int x, y;
 	bool inside;
@@ -291,7 +289,7 @@ void ofxKuBox2dWorld::findMoveFromMask(vector<unsigned char> &mask, int w, int h
 	moved = false;
 
 	//метод сходящихся шаров
-	const int iterations = 3;		//ПАРАМЕТР число итераций сходящихся шаров
+	const int iterations = prm.rolling_iterations;		//число итераций сходящихся шаров
 
 	for ( int iter = 0; iter < iterations; iter++ ) {
 		ofVec2f sum( 0, 0 );
@@ -346,7 +344,7 @@ void ofxKuBox2dWorld::applyForces(vector<unsigned char> &mask, int w, int h)
 			c._body->SetTransform( toWorld( bestPos ), c._body->GetAngle() );	
 
 			//2. Cила
-			const float ForceBoost = 20.0;				//ПАРАМЕТР усиления силы
+			const float ForceBoost = prm.force_boost;				//ПАРАМЕТР усиления силы
 
 			ofVec2f delta = bestPos - c.p;
 			b2Vec2 force = forceToWorld( delta );
