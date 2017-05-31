@@ -33,31 +33,29 @@ void ofApp::setup(){
 	//TEST
 	//circWorld_.addTriangle( ofPoint( 0, h ), ofPoint( 100, h ), ofPoint( 0, h-100 ) );
 
-	//ограничения
+	//bottom line
 	circWorld_.addStaticEdge( ofPoint( 0, _h - 1 ), ofPoint( _w, _h - 1 ), 0 );
 
-	//круги
+	//circles
 	int n = 70; 
 
 	float sizeMin = 10;
 	float sizeMax = 25;
 	for (int i=0; i<n; i++) {
-		//добавляем круг
 		CircleData c;
 		c.rad		= ofRandom( sizeMin, sizeMax ); 
-		c.p			= ofPoint( ofRandom( c.rad, _w - c.rad ), ofRandom( c.rad, _h / 2 ) );	//последний круг - для гантели
+		c.p			= ofPoint( ofRandom( c.rad, _w - c.rad ), ofRandom( c.rad, _h / 2 ) );
 		c.angleDeg		= 0.0;
-		c.groupIndex	= i; //тип круга - для рендеринга, нулевой - для гантели
+		c.groupIndex	= i; 
 		c.groupIndex0 = c.groupIndex;
-		c.density		= 10.0;//1.0;	//плотность, влияет на массу
-		c.friction		= 0.2; //0.5; //трение
-		c.restitution	= 0.4; //0.2; 		//отскок
+		c.density		= 10.0;	//density, affects massk
+		c.friction		= 0.2; 
+		c.restitution	= 0.4; 
 
 		circWorld_.addCircle( c );
 	}
 
-	//шары наверх закидываем
-	//int n = circWorld_.circles().size(); 
+	//pull up all circles
 	//for (int i=0; i<n; i++) {
 	//	circleRestartPos( i, true );
 	//}
@@ -65,16 +63,16 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	//обновление маски
+	//update mask
 	updateMask();
 
-	//Воздействие на частицы
+	//apply mask to the world
 	circWorld_.applyForces(mask, maskw, maskh);
 	
-	//Восстановление улетевших частиц, превращения и т.д.
+	//restore falling circles
 	physicsControl();						
 	
-	//Обновление физики и списка для рисования
+	//update physics
 	circWorld_.update( true );
 }
 
@@ -89,7 +87,7 @@ void ofApp::updateMask() {
 	int x0 = ofMap(sin(t*TWO_PI*freq),-1,1,0.25,0.75)*maskw;
 	int rx = maskw*0.15;
 
-	//горизонталь
+	//horizontal
 	int y0 = maskh*0.5;
 	int y1 = maskh*0.55;
 	for (int y=y0; y<y1; y++) {
@@ -98,7 +96,7 @@ void ofApp::updateMask() {
 		}
 	}
 
-	//вертикаль
+	//vertical
 	int rx2 = maskw*0.03;
 	int ry2 = maskh*0.1;
 	int ry3 = maskh*0.2;
@@ -113,14 +111,41 @@ void ofApp::updateMask() {
 }
 
 //--------------------------------------------------------------
+//restart circle
+void ofApp::circleRestartPos(int i, bool farStart)
+{
+	float fromUp = (farStart) ? 2.0 : 0.1;			
+	float fromUpY = fromUp * _h;
+
+	CircleData &c = circWorld_.circles()[i];
+	ofPoint pNew = ofPoint( ofRandom( c.rad, _w - c.rad ), -c.rad + ofRandom( -fromUpY, 0 ) );
+	circWorld_.setCirclePosAndVelocity( i, pNew, ofPoint( 0, 0 ), 0.0 );
+}
+
+//--------------------------------------------------------------
+//restore falling circles
+void ofApp::physicsControl()
+{	
+	vector<CircleData> &circles = circWorld_.circles();
+
+	for (int i=0; i<circles.size(); i++) {
+		CircleData &c = circles[ i ];
+		ofPoint &p = c.p;
+		if ( p.y - c.rad > _h ) { 
+			circleRestartPos( i );
+		}
+	}
+}
+
+//--------------------------------------------------------------
 void ofApp::draw(){
-	//маска
+	//mask
 	ofImage mask_img;
 	mask_img.setFromPixels(&mask[0],maskw,maskh,OF_IMAGE_GRAYSCALE);
 	ofSetColor(255,128);
 	mask_img.draw(0,0,_w,_h);
 
-	//ограничения
+	//borders
 	ofSetColor( 255, 0, 0 );
 	vector<EdgeData> staticEdges = circWorld_.staticEdges();
 	for (int i = 0; i < staticEdges.size(); i++ ) {
@@ -132,7 +157,7 @@ void ofApp::draw(){
 		}
 	}
 
-	//треугольники
+	//triangles
 	ofFill();
 	ofSetPolyMode(OF_POLY_WINDING_ODD);	// this is the normal mode
 	ofSetColor( 128, 0, 0 );
@@ -147,7 +172,7 @@ void ofApp::draw(){
 	}
 	ofNoFill();
 
-	//Круги
+	//circles
 	ofNoFill();
 	vector<CircleData> circles = circWorld_.circles();
 	for (int i=0; i<circles.size(); i++) {
@@ -211,42 +236,6 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
-}
-
-//--------------------------------------------------------------
-//перезапустить положение шарика
-void ofApp::circleRestartPos(int i, bool farStart)
-{
-	float fromUp = (farStart) ? 2.0 : 0.1;							//ПАРАМЕТР, откуда стартовать по Y
-	float fromUpY = fromUp * _h;
-
-	CircleData &c = circWorld_.circles()[i];
-	ofPoint pNew = ofPoint( ofRandom( c.rad, _w - c.rad ), -c.rad + ofRandom( -fromUpY, 0 ) );
-	circWorld_.setCirclePosAndVelocity( i, pNew, ofPoint( 0, 0 ), 0.0 );
-}
-
-//--------------------------------------------------------------
-//восстановление упавших шариков
-void ofApp::physicsControl()
-{
-	//const float letDown = 0.2;					//ПАРАМЕТР, на сколько давать упасть вниз
-	
-	const float tubeTransformRad = 1.5;						//ПАРАМЕТР увеличение радиуса после трубы
-	vector<CircleData> &circles = circWorld_.circles();
-
-	//Восстановление улетевших частиц
-
-	for (int i=0; i<circles.size(); i++) {
-		CircleData &c = circles[ i ];
-		ofPoint &p = c.p;
-		float downY = _h; //_param.getBottom( p.x, _w, _h );
-		if ( p.y - c.rad > downY ) { //_h + letDownY ) {
-			//частица упала
-			//восстановление в новом месте
-			circleRestartPos( i );
-		}
-
-	}
 }
 
 //--------------------------------------------------------------
