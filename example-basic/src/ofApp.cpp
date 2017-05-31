@@ -3,7 +3,6 @@
 
 ofxKuBox2dWorld circWorld_;
 
-
 int _w = 1024;		//screen size
 int _h = 768;
 
@@ -21,7 +20,7 @@ void ofApp::setup(){
 
 	mask.resize(maskw*maskh);
 
-	//Physic's parameters. See its definition to find more parameters for adjusting
+	//physics parameters. See its definition to find more parameters for adjusting
 	ofxKuBox2dWorldParams prm;
 	prm.scr_w = _w;
 	prm.scr_h = _h;
