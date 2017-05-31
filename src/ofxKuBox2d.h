@@ -14,7 +14,6 @@ struct CircleData {
 	float friction;		
 	float restitution;	
 
-
 	//---- 
 	b2Body *_body;
 
@@ -74,13 +73,11 @@ struct ofxKuBox2dWorldParams {
 	//Forces
 	float gravity;						//Gravity force
 
-
 	//--------- Variables
 	//You can change them dynamically
 	//Time
 	float fps;							//Frame rate
 	float timeStep() { return (fps>0)?(1.0/fps):(1.0/60.0); }
-
 
 	//Applying mask to world
 	int velocity_iterations;	//Number of iterations for compute physics			
@@ -102,7 +99,6 @@ struct ofxKuBox2dWorldParams {
 		position_iterations = 10;	
 		rolling_iterations = 3;
 		force_boost = 20.0;
-
 	}
 };
 
@@ -113,7 +109,7 @@ public:
 	void setup(ofxKuBox2dWorldParams prm);
 
 	//Apply mask to physics world
-	void applyForces(vector<unsigned char> &mask, int w, int h);
+	void applyMask(vector<unsigned char> &mask, int w, int h);
 
 	void update( bool physics = true );
 	void clear();
@@ -167,9 +163,8 @@ protected:
 
 	vector<CircleData> _circles;
 	vector<TriangleData> _triangles;
-
 	
-	//найти вектор сдвига шара
+	//find vector of circle move
 	void findMoveFromMask(vector<unsigned char> &mask, int w, int h, ofPoint p, int rad, ofVec2f &newPos, bool &moved);
 
 };

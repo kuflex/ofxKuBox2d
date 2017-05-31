@@ -66,9 +66,9 @@ void ofApp::update(){
 	updateMask();
 
 	//apply mask to the world
-	circWorld_.applyForces(mask, maskw, maskh);
+	circWorld_.applyMask(mask, maskw, maskh);
 	
-	//restore falling circles
+	//restore falled out circles
 	physicsControl();						
 	
 	//update physics

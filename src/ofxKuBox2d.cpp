@@ -323,7 +323,7 @@ void ofxKuBox2dWorld::findMoveFromMask(vector<unsigned char> &mask, int w, int h
 
 //--------------------------------------------------------------
 //Apply mask to physics world
-void ofxKuBox2dWorld::applyForces(vector<unsigned char> &mask, int w, int h)
+void ofxKuBox2dWorld::applyMask(vector<unsigned char> &mask, int w, int h)
 {
 	float timeStep = prm.timeStep();
 	//Выталкивание частиц
