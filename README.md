@@ -15,6 +15,8 @@ Addon includes example which shows falling circles
 and a "human" on a binary mask which moves left and right 
 and affects to the circles.
 
+![Screenshot](https://raw.githubusercontent.com/kuflex/ofxKuBox2d/master/ofxKuBox2d/example-shot.PNG)
+
 ## Installation
 Addon should link smoothly to your openFrameworks project using Project Generator.
 For manual installation, add addon's libs and src folders to the includes settings of your IDE project,
