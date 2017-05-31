@@ -10,3 +10,12 @@
 *.log
 *.tlog
 *.cache
+*.ilk
+*.pdb
+*.opensdf
+*.filters
+*.user
+*.lastbuildstate
+*.res
+*.sdf
+*.idb
