@@ -5,17 +5,17 @@ Kuflex addon for Box2D in openFrameworks intended for simulating physics with Ki
 * The main feature - using binary mask (received from Kinect of web camera) to affect circles.
 It is implemented using just forces from mask to circles, no triangulation!
 
-Example of project used this method:
+Example of project made using this technique: [www.youtube.com/watch?v=vHOui4aIokM](http://www.youtube.com/watch?v=vHOui4aIokM)
 
-http://www.youtube.com/watch?v=vHOui4aIokM
 [![Video](http://img.youtube.com/vi/vHOui4aIokM/0.jpg)](http://www.youtube.com/watch?v=vHOui4aIokM)
+
 
 ## Example
 Addon includes example which shows falling circles 
 and a "human" on a binary mask which moves left and right 
 and affects to the circles.
 
-![Screenshot](https://raw.githubusercontent.com/kuflex/ofxKuBox2d/master/ofxKuBox2d/example-shot.PNG)
+![Screenshot](https://raw.githubusercontent.com/kuflex/ofxKuBox2d/master/example-shot.PNG)
 
 ## Installation
 Addon should link smoothly to your openFrameworks project using Project Generator.
