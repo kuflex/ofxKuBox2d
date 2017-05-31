@@ -229,7 +229,7 @@ void ofxKuBox2dWorld::setCircleRadAndTexture( int i, float rad, int texture )
 {
 	CircleData &c = _circles[ i ];
 	c.rad = rad;
-	c.groupIndex = texture;
+	c.id = texture;
 	b2Body *body = c._body;
 	b2Fixture* fixture = body->GetFixtureList();
 	b2CircleShape *shape = (b2CircleShape*) fixture->GetShape();

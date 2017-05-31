@@ -7,15 +7,26 @@ struct CircleData {
 	ofPoint p;
 	float rad;
 	float angleDeg;
-	int groupIndex;		//тип круга - для рендеринга
-	int groupIndex0;	//исходный тип круга - чтоб восстанавливать
+	int id;		//id - for external usage, for custom drawing
+	int id0;	//for additional external use
 
 	float density;
-	float friction;		//трение
-	float restitution;	//отскок
+	float friction;		
+	float restitution;	
 
-	//---- внутренняя переменная
-	b2Body *_body;	//для обновления координат, делается само в update()
+
+	//---- 
+	b2Body *_body;
+
+	CircleData() {
+		rad			= 10;
+		angleDeg	= 0;
+		id			= 0;
+		id0			= 0;
+		density		= 10.0;	
+		friction	= 0.2; 
+		restitution	= 0.4; 
+	}
 };
 
 struct EdgeData {
@@ -136,8 +147,8 @@ public:
 	vector<CircleData> &circles() { return _circles; }
 	void setCirclePosAndVelocity( int i, ofPoint pos, ofPoint vel, float angVel ); //используется в случае, когда улетает за границы
 	void setCircleRadAndTexture( int i, float rad, int texture );
-	int circleClass( int i, bool old = false ) { return ( !old ) ? _circles[i].groupIndex : _circles[i].groupIndex0; }
-	void setCircleClass( int i, int cl ) { _circles[i].groupIndex = cl; }
+	int circleId( int i, bool old = false ) { return ( !old ) ? _circles[i].id : _circles[i].id0; }
+	void setCircleId( int i, int cl ) { _circles[i].id = cl; }
 
 	void addTriangle( const ofPoint &point0, const ofPoint &point1, const ofPoint &point2 );
 	void clearTriangles();

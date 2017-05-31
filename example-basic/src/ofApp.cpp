@@ -45,9 +45,9 @@ void ofApp::setup(){
 		c.rad		= ofRandom( sizeMin, sizeMax ); 
 		c.p			= ofPoint( ofRandom( c.rad, _w - c.rad ), ofRandom( c.rad, _h / 2 ) );
 		c.angleDeg		= 0.0;
-		c.groupIndex	= i; 
-		c.groupIndex0 = c.groupIndex;
-		c.density		= 10.0;	//density, affects massk
+		c.id	= i; 
+		c.id0	= i;
+		c.density		= 10.0;	//density, affects mask
 		c.friction		= 0.2; 
 		c.restitution	= 0.4; 
 
