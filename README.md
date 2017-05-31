@@ -7,6 +7,7 @@ It is implemented using just forces from mask to circles, no triangulation!
 
 Example of project used this method:
 
+http://www.youtube.com/watch?v=vHOui4aIokM
 [![Video](http://img.youtube.com/vi/vHOui4aIokM/0.jpg)](http://www.youtube.com/watch?v=vHOui4aIokM)
 
 ## Example
