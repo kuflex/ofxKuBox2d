@@ -1,4 +1,12 @@
 /*.DS_Store
 *.dll
 *.obj
-*.zip
+*.exe
+*.exp
+*.lib
+*.sln
+*.suo
+*.vcxproj
+*.log
+*.tlog
+*.cache
