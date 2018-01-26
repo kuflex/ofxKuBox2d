@@ -215,7 +215,15 @@ void ofxKuBox2dWorld::addCircle( const CircleData &circle0 )
 }
 
 //--------------------------------------------------------------------
-void ofxKuBox2dWorld::setCirclePosAndVelocity( int i, ofPoint pos, ofPoint vel, float angVel ) //используется в случае, когда улетает за границы
+void ofxKuBox2dWorld::setCirclePos(int i, ofPoint pos) 
+{
+	CircleData &c = _circles[i];
+	b2Body* body = c._body;
+	body->SetTransform(toWorld(pos), body->GetAngle());
+}
+
+//--------------------------------------------------------------------
+void ofxKuBox2dWorld::setCirclePosAndVelocity( int i, ofPoint pos, ofPoint vel, float angVel )
 {
 	CircleData &c = _circles[ i ];
 	b2Body* body = c._body;
@@ -281,7 +289,7 @@ void ofxKuBox2dWorld::findMoveFromMask(vector<unsigned char> &mask, int w, int h
 	const float scaleY = 1.0 * h / prm.scr_h;
 	
 	int x, y;
-	bool inside;
+	//bool inside;
 	//расчет вектора выталкивания
 
 	//ofPoint p = c.p;
