@@ -14,6 +14,9 @@ struct CircleData {
 	float friction;		
 	float restitution;	
 
+	int custom_i1, custom_i2, custom_i3, custom_i4;	//user's data for texture coords and so on
+	float custom_f1, custom_f2, custom_f3, custom_f4;	
+
 	//---- 
 	b2Body *_body;
 
@@ -25,6 +28,31 @@ struct CircleData {
 		density		= 10.0;	
 		friction	= 0.2; 
 		restitution	= 0.4; 
+	}
+};
+
+struct RectData {
+	ofPoint p;
+	float radx, rady;
+	float angleDeg;
+	int id;		//id - for external usage, for custom drawing
+	int id0;	//for additional external use
+
+	float density;
+	float friction;
+	float restitution;
+
+	//---- 
+	b2Body *_body;
+
+	RectData() {
+		radx = rady = 10;
+		angleDeg = 0;
+		id = 0;
+		id0 = 0;
+		density = 10.0;
+		friction = 0.2;
+		restitution = 0.4;
 	}
 };
 
@@ -147,6 +175,17 @@ public:
 	int circleId( int i, bool old = false ) { return ( !old ) ? _circles[i].id : _circles[i].id0; }
 	void setCircleId( int i, int cl ) { _circles[i].id = cl; }
 
+
+	void addRect(const RectData &rect);
+	vector<RectData> &rects() { return _rects; }
+	void setRectPos(int i, ofPoint pos);
+	void setRectPosAndVelocity(int i, ofPoint pos, ofPoint vel, float angVel); //используется в случае, когда улетает за границы
+	//void setRectRadAndTexture(int i, float rad, int texture);
+	int RectId(int i, bool old = false) { return (!old) ? _rects[i].id : _rects[i].id0; }
+	void setRectId(int i, int cl) { _rects[i].id = cl; }
+
+
+
 	void addTriangle( const ofPoint &point0, const ofPoint &point1, const ofPoint &point2 );
 	void clearTriangles();
 	vector<TriangleData> &triangles() { return _triangles; }
@@ -163,6 +202,7 @@ protected:
 	b2Body *_groundBody;
 
 	vector<CircleData> _circles;
+	vector<RectData> _rects;
 	vector<TriangleData> _triangles;
 	
 	//find vector of circle move

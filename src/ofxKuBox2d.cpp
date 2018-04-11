@@ -103,6 +103,15 @@ void ofxKuBox2dWorld::update( bool physics )
 		c.p = toScreen( position );
 	}	
 
+	//Обновление списка прямоугольников
+	for (int i = 0; i<_rects.size(); i++) {
+		RectData &r = _rects[i];
+		b2Vec2 position = r._body->GetPosition();
+		float32 angle = r._body->GetAngle();
+		r.angleDeg = angleToScreen(angle);
+		r.p = toScreen(position);
+	}
+
 }
 
 //--------------------------------------------------------------------
@@ -242,8 +251,77 @@ void ofxKuBox2dWorld::setCircleRadAndTexture( int i, float rad, int texture )
 	b2Fixture* fixture = body->GetFixtureList();
 	b2CircleShape *shape = (b2CircleShape*) fixture->GetShape();
 	shape->m_radius = sizeToWorld( rad );
-	
 }
+
+//--------------------------------------------------------------------
+void ofxKuBox2dWorld::addRect(const RectData &rect0)
+{
+	RectData rect = rect0;
+
+	// Define the dynamic body. We set its position and call the body factory.
+	b2BodyDef bodyDef;
+	bodyDef.type = b2_dynamicBody;
+	bodyDef.position = toWorld(rect.p); //.Set(0.0f, 15.0f);
+	bodyDef.angle = angleToWorld(rect.angleDeg);
+	b2Body* body = world()->CreateBody(&bodyDef);
+	rect._body = body;
+
+	// Define another box shape for our dynamic body.
+	b2PolygonShape rectShape;
+	rectShape.SetAsBox(rect.radx, rect.rady);
+	//rectShape.m_p.SetZero();
+	//circleShape.m_radius = sizeToWorld(circle.rad);
+
+	// Define the dynamic body fixture.
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &rectShape;
+
+	// Set the box density to be non-zero, so it will be dynamic.
+	fixtureDef.density = rect.density;
+
+	// Override the default friction.
+	fixtureDef.friction = rect.friction;			//0.3f;
+	fixtureDef.restitution = rect.restitution;	//0.2;
+
+													// Add the shape to the body.
+	body->CreateFixture(&fixtureDef);
+
+	//запись в список
+	_rects.push_back(rect);	
+
+
+}
+
+//--------------------------------------------------------------------
+void ofxKuBox2dWorld::setRectPos(int i, ofPoint pos)
+{
+	RectData &c = _rects[i];
+	b2Body* body = c._body;
+	body->SetTransform(toWorld(pos), body->GetAngle());
+}
+
+//--------------------------------------------------------------------
+void ofxKuBox2dWorld::setRectPosAndVelocity(int i, ofPoint pos, ofPoint vel, float angVel)
+{
+	RectData &r = _rects[i];
+	b2Body* body = r._body;
+	body->SetTransform(toWorld(pos), body->GetAngle());
+	body->SetLinearVelocity(forceToWorld(vel));
+	body->SetAngularVelocity(angVel);
+
+}
+
+/*void ofxKuBox2dWorld::setRectRadAndTexture(int i, float rad, int texture)
+{
+	RectData &r = _rects[i];
+	r.rad = rad;
+	r.id = texture;
+	b2Body *body = r._body;
+	b2Fixture* fixture = body->GetFixtureList();
+	b2CircleShape *shape = (b2CircleShape*)fixture->GetShape();
+	shape->m_radius = sizeToWorld(rad);
+
+}*/
 
 //--------------------------------------------------------------------
 void ofxKuBox2dWorld::addTriangle( const ofPoint &point0, const ofPoint &point1, const ofPoint &point2 )
