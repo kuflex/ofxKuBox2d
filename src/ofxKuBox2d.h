@@ -169,6 +169,7 @@ public:
 
 	void addCircle( const CircleData &circle ); 
 	vector<CircleData> &circles() { return _circles; }
+	void removeCircle(int id);	//после него меняется размер вектора!
 	void setCirclePos(int i, ofPoint pos);
 	void setCirclePosAndVelocity( int i, ofPoint pos, ofPoint vel, float angVel ); //используется в случае, когда улетает за границы
 	void setCircleRadAndTexture( int i, float rad, int texture );

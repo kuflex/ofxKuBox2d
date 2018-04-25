@@ -224,6 +224,16 @@ void ofxKuBox2dWorld::addCircle( const CircleData &circle0 )
 }
 
 //--------------------------------------------------------------------
+void ofxKuBox2dWorld::removeCircle(int id) {	//после него меняется размер вектора!
+	if (id >= 0 && id < _circles.size()) {
+		world()->DestroyBody(_circles[id]._body);
+		_circles[id] = _circles[_circles.size() - 1];
+		_circles.erase(_circles.begin() + id);
+	}
+
+}
+
+//--------------------------------------------------------------------
 void ofxKuBox2dWorld::setCirclePos(int i, ofPoint pos) 
 {
 	CircleData &c = _circles[i];
